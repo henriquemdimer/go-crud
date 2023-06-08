@@ -1,4 +1,4 @@
-package models
+package todoModel
 
 import "github.com/henriquemdimer/go-crud/db"
 
