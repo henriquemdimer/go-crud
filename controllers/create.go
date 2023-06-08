@@ -6,11 +6,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/henriquemdimer/go-crud/models"
+	model_todo "github.com/henriquemdimer/go-crud/models/todo"
 )
 
 func Create(w http.ResponseWriter, r *http.Request) {
-	var todo models.Todo
+	var todo model_todo.Todo
 
 	err := json.NewDecoder(r.Body).Decode(&todo)
 	if err != nil {
@@ -19,7 +19,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := models.InsertOne(todo)
+	id, err := model_todo.InsertOne(todo)
 	var resp map[string]any
 
 	if err != nil {
