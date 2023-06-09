@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/henriquemdimer/go-crud/controllers"
 	"github.com/henriquemdimer/go-crud/db"
+	"github.com/henriquemdimer/go-crud/handlers"
 )
 
 func main() {
@@ -18,12 +18,10 @@ func main() {
 	}
 	db.Close()
 
-	r := chi.NewRouter()
+	router := chi.NewRouter()
 
-	r.Post("/", controllers.Create)
-	r.Get("/", controllers.ReadAll)
-	r.Get("/{todoID}", controllers.ReadOne)
-	r.Delete("/{todoID}", controllers.Delete)
+	router.Route("/todos", handlers.LoadTodoRoutes)
+	router.Route("/users", handlers.LoadUserRoutes)
 
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":8080", router)
 }
