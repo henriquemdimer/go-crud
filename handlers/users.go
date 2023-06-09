@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"github.com/go-chi/chi/v5"
-	userControllers "github.com/henriquemdimer/go-crud/controllers/user"
+	controllers "github.com/henriquemdimer/go-crud/controllers"
 )
 
 func LoadUserRoutes(router chi.Router) {
-	router.Post("/", userControllers.Create)
+	router.Post("/", controllers.CreateUser)
 }

@@ -2,13 +2,13 @@ package handlers
 
 import (
 	"github.com/go-chi/chi/v5"
-	todoControllers "github.com/henriquemdimer/go-crud/controllers/todo"
+	"github.com/henriquemdimer/go-crud/controllers"
 )
 
 func LoadTodoRoutes(router chi.Router) {
-	router.Post("/", todoControllers.Create)
-	router.Get("/", todoControllers.ReadAll)
-	router.Get("/{todoID}", todoControllers.ReadOne)
-	router.Delete("/{todoID}", todoControllers.Delete)
-	router.Put("/{todoID}", todoControllers.Update)
+	router.Post("/", controllers.CreateTodo)
+	router.Get("/", controllers.ReadAllTodos)
+	router.Get("/{todoID}", controllers.ReadOneTodo)
+	router.Delete("/{todoID}", controllers.DeleteTodo)
+	router.Put("/{todoID}", controllers.UpdateTodo)
 }
