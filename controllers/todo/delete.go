@@ -1,7 +1,8 @@
-package controllers
+package todoControllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -19,5 +20,11 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(rows)
+	if rows < 1 {
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(fmt.Sprintf("Todos deleted: %d", rows))
 }
