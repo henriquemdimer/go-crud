@@ -1,8 +1,14 @@
-package userModel
+package models
 
 import "github.com/henriquemdimer/go-crud/db"
 
-func Insert(name string, password string) (id int64, err error) {
+type User struct {
+	Id       int64  `json:"id"`
+	Name     string `json:"name"`
+	Password string `json:"password"`
+}
+
+func InsertUser(name string, password string) (id int64, err error) {
 	db, err := db.Open()
 	if err != nil {
 		return
