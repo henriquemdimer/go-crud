@@ -1,4 +1,4 @@
-package userControllers
+package controllers
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/henriquemdimer/go-crud/auth"
-	userModel "github.com/henriquemdimer/go-crud/models/user"
+	"github.com/henriquemdimer/go-crud/models"
 )
 
 func returnError(w http.ResponseWriter, err error) {
@@ -14,8 +14,8 @@ func returnError(w http.ResponseWriter, err error) {
 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
 
-func Create(w http.ResponseWriter, r *http.Request) {
-	var user userModel.User
+func CreateUser(w http.ResponseWriter, r *http.Request) {
+	var user models.User
 
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
@@ -23,7 +23,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := userModel.Insert(user.Name, user.Password)
+	id, err := models.InsertUser(user.Name, user.Password)
 	if err != nil {
 		returnError(w, err)
 		return
