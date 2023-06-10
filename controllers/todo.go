@@ -12,6 +12,7 @@ import (
 
 func CreateTodo(w http.ResponseWriter, r *http.Request) {
 	var todo models.Todo
+	userID := r.Context().Value("userID").(int64)
 
 	err := json.NewDecoder(r.Body).Decode(&todo)
 	if err != nil {
@@ -19,7 +20,7 @@ func CreateTodo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := models.InsertOneTodo(todo)
+	id, err := models.InsertOneTodo(todo, userID)
 	var resp map[string]any
 
 	if err != nil {
@@ -41,8 +42,9 @@ func CreateTodo(w http.ResponseWriter, r *http.Request) {
 func DeleteTodo(w http.ResponseWriter, r *http.Request) {
 	todoID := chi.URLParam(r, "todoID")
 	id, _ := strconv.ParseInt(todoID, 0, 0)
+	userID := r.Context().Value("userID").(int64)
 
-	rows, err := models.DeleteOneTodo(id)
+	rows, err := models.DeleteOneTodo(id, userID)
 	if err != nil || rows > 1 {
 		returnError(w, err)
 		return
@@ -59,7 +61,9 @@ func DeleteTodo(w http.ResponseWriter, r *http.Request) {
 
 func ReadAllTodos(w http.ResponseWriter, r *http.Request) {
 	var todos []models.Todo
-	todos, err := models.GetAllTodos()
+	userID := r.Context().Value("userID").(int64)
+	todos, err := models.GetAllTodos(userID)
+
 	if err != nil {
 		returnError(w, err)
 		return
@@ -72,7 +76,9 @@ func ReadAllTodos(w http.ResponseWriter, r *http.Request) {
 func ReadOneTodo(w http.ResponseWriter, r *http.Request) {
 	todoID := chi.URLParam(r, "todoID")
 	id, _ := strconv.ParseInt(todoID, 0, 0)
-	todo, err := models.GetOneTodo(id)
+	userID := r.Context().Value("userID").(int64)
+
+	todo, err := models.GetOneTodo(id, userID)
 	if err != nil {
 		returnError(w, err)
 		return
@@ -85,6 +91,7 @@ func ReadOneTodo(w http.ResponseWriter, r *http.Request) {
 func UpdateTodo(w http.ResponseWriter, r *http.Request) {
 	todoID := chi.URLParam(r, "todoID")
 	id, _ := strconv.ParseInt(todoID, 0, 0)
+	userID := r.Context().Value("userID").(int64)
 
 	var todo models.Todo
 	err := json.NewDecoder(r.Body).Decode(&todo)
@@ -93,7 +100,7 @@ func UpdateTodo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rows, err := models.UpdateOneTodo(id, todo)
+	rows, err := models.UpdateOneTodo(id, todo, userID)
 	if err != nil {
 		returnError(w, err)
 		return

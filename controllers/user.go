@@ -25,7 +25,6 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	id, err := models.InsertUser(user.Name, user.Password)
 	if err != nil {
-		returnError(w, err)
 		return
 	}
 
