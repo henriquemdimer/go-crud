@@ -1,0 +1,130 @@
+.todo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.todo div {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.todo p {
+    margin-left: 30px;
+    position: relative;
+}
+
+.todo p::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 4px;
+    opacity: 0;
+    transition: all ease .5s;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.todo .checkbox {
+    position: relative;
+    display: block;
+    pointer-events: none;
+}
+
+.todo .checkbox input {
+    opacity: 0;
+    position: absolute;
+    height: 0;
+    width: 0;
+    cursor: none;
+    top: 0;
+    left: 0;
+}
+
+.todo .checkbox span {
+    min-width: 22px;
+    min-height: 22px;
+    position: absolute;
+    border: 1px solid gray;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all ease .25s;
+}
+
+.todo .checkbox span::after {
+    content: "";
+    width: 10px;
+    height: 2px;
+    background-color: white;
+    position: absolute;
+    top: 48.5%;
+    left: 60%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.todo .checkbox span::before {
+    content: "";
+    width: 6px;
+    background-color: white;
+    position: absolute;
+    top: 55%;
+    left: 38%;
+    height: 2px;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.todo .checkbox input:checked~.checkmark {
+    background-color: dodgerblue;
+    border: none;
+}
+
+.todo .x {
+    position: relative;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.todo .x::after {
+    content: "";
+    width: 15px;
+    height: 3px;
+    background-color: black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    border-radius: 2px;
+}
+
+.todo .x::before {
+    content: "";
+    width: 15px;
+    height: 3px;
+    background-color: black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    border-radius: 2px;
+}
+
+.todo.line p {
+    color: gray;
+}
+
+.todo.line p::after {
+    content: "";
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    border-radius: 2px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    opacity: .8;
+}
