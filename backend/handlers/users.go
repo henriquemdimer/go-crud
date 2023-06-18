@@ -7,4 +7,5 @@ import (
 
 func LoadUserRoutes(router chi.Router) {
 	router.Post("/", controllers.CreateUser)
+	router.Post("/login", controllers.GetUser)
 }

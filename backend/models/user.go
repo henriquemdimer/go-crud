@@ -20,3 +20,15 @@ func InsertUser(name string, password string) (id int64, err error) {
 	db.Close()
 	return
 }
+
+func GetUser(name string) (user User, err error) {
+	db, err := db.Open()
+	if err != nil {
+		return
+	}
+
+	err = db.QueryRow("SELECT * FROM users WHERE name=$1", name).Scan(&user.Id, &user.Name, &user.Password)
+
+	db.Close()
+	return
+}

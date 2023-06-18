@@ -23,8 +23,15 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	checkUser, _ := models.GetUser(user.Name)
+	if checkUser.Name == user.Name {
+		http.Error(w, http.StatusText(http.StatusConflict), http.StatusConflict)
+		return
+	}
+
 	id, err := models.InsertUser(user.Name, user.Password)
 	if err != nil {
+		returnError(w, err)
 		return
 	}
 
@@ -37,6 +44,41 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	res := map[string]any{
 		"token": token,
 		"id":    id,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(res)
+}
+
+func GetUser(w http.ResponseWriter, r *http.Request) {
+	var receivedUser models.User
+
+	err := json.NewDecoder(r.Body).Decode(&receivedUser)
+	if err != nil {
+		returnError(w, err)
+		return
+	}
+
+	user, err := models.GetUser(receivedUser.Name)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	if user.Password != receivedUser.Password {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	token, err := auth.CreateToken(user.Id)
+	if err != nil {
+		returnError(w, err)
+		return
+	}
+
+	res := map[string]any{
+		"token": token,
+		"id":    user.Id,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
