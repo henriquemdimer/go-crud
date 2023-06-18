@@ -1,0 +1,22 @@
+.modal {
+    max-width: 300px;
+    width: 100%;
+    min-height: 300px;
+    border-radius: 12px;
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% + 80px)) scale(0.6);
+    z-index: 3;
+    transition: all ease .5s;
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.modal.active {
+    pointer-events: all;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
