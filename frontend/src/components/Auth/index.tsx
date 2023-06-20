@@ -3,17 +3,20 @@ import { Button } from "../Button";
 import { Modal } from "../Modal";
 
 import "./style.css";
-import { createUser, getUser } from "../../shared/api/user";
+import { Login, createUser } from "../../shared/api/user";
 
 export interface IProps {
     active: boolean;
     setActive: (state: boolean) => void;
+    reloadData: (...args: any[]) => Promise<void>;
 }
 
 export function Auth(props: IProps) {
     const [method, setMethod] = useState("login");
+    const [loading, setLoading] = useState(false);
 
     async function createAccount(e: FormEvent) {
+        setLoading(true);
         e.preventDefault();
         const username = document.getElementById("register__username") as HTMLInputElement;
         const password = document.getElementById("register__password") as HTMLInputElement;
@@ -27,12 +30,16 @@ export function Auth(props: IProps) {
             const { data } = await createUser(username.value, password.value);
             localStorage.setItem("token", data.token);
             props.setActive(false);
+            await props.reloadData();
         } catch (err) {
             console.log(err);
+        } finally {
+            setLoading(false);
         }
     }
 
     async function getAccount(e: FormEvent) {
+        setLoading(true);
         e.preventDefault();
         const username = document.getElementById("login__username") as HTMLInputElement;
         const password = document.getElementById("login__password") as HTMLInputElement;
@@ -41,11 +48,14 @@ export function Auth(props: IProps) {
         if (!username.value || !username.value) return console.log("missing values");
 
         try {
-            const { data } = await getUser(username.value, password.value);
+            const { data } = await Login(username.value, password.value);
             localStorage.setItem("token", data.token);
             props.setActive(false);
+            await props.reloadData();
         } catch (err) {
             console.error(err);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -64,7 +74,7 @@ export function Auth(props: IProps) {
                                 <label>Senha</label>
                                 <input required type="password" id="login__password" />
                             </div>
-                            <Button type="submit" label='Logar' />
+                            <Button loading={loading} type="submit" label='Logar' />
                             <div className="auth__change">
                                 <p>Não possui uma conta? <span onClick={() => setMethod("register")}>Crie uma</span></p>
                             </div>
@@ -86,7 +96,7 @@ export function Auth(props: IProps) {
                                 <label>Repetir senha</label>
                                 <input required type="password" id="register__rpassword" />
                             </div>
-                            <Button type="submit" label='Criar conta' />
+                            <Button loading={loading} type="submit" label='Criar conta' />
                             <div className="auth__change">
                                 <p>Já possui uma conta? <span onClick={() => setMethod("login")}>Entre nela</span></p>
                             </div>
