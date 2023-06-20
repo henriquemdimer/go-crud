@@ -23,7 +23,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	checkUser, _ := models.GetUser(user.Name)
+	checkUser, _ := models.GetUserByName(user.Name)
 	if checkUser.Name == user.Name {
 		http.Error(w, http.StatusText(http.StatusConflict), http.StatusConflict)
 		return
@@ -50,7 +50,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(res)
 }
 
-func GetUser(w http.ResponseWriter, r *http.Request) {
+func Login(w http.ResponseWriter, r *http.Request) {
 	var receivedUser models.User
 
 	err := json.NewDecoder(r.Body).Decode(&receivedUser)
@@ -59,7 +59,7 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := models.GetUser(receivedUser.Name)
+	user, err := models.GetUserByName(receivedUser.Name)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
@@ -83,4 +83,17 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(res)
+}
+
+func GetUser(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value("userID").(int64)
+	user, err := models.GetUserById(userID)
+	if err != nil {
+		returnError(w, err)
+		return
+	}
+
+	user.Password = ""
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(user)
 }
