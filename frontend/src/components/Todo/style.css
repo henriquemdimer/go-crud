@@ -2,6 +2,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all ease .5s;
+}
+
+.todo.active {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .todo div {
