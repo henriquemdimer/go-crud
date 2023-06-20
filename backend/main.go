@@ -24,7 +24,14 @@ func main() {
 	router.Route("/todos", handlers.LoadTodoRoutes)
 	router.Route("/users", handlers.LoadUserRoutes)
 
-	handler := cors.Default().Handler(router)
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowCredentials: true,
+		Debug:            true,
+		AllowedHeaders:   []string{"Authorization", "Content-Type"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+	})
+	handler := c.Handler(router)
 
 	http.ListenAndServe(":8080", handler)
 }
