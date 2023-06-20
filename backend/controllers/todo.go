@@ -100,7 +100,7 @@ func UpdateTodo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rows, err := models.UpdateOneTodo(id, todo, userID)
+	rows, err := models.UpdateOneTodo(id, todo.Done, userID)
 	if err != nil {
 		returnError(w, err)
 		return

@@ -62,13 +62,13 @@ func InsertOneTodo(todo Todo, userID int64) (id int64, err error) {
 	return
 }
 
-func UpdateOneTodo(id int64, todo Todo, userID int64) (int64, error) {
+func UpdateOneTodo(id int64, done bool, userID int64) (int64, error) {
 	db, err := db.Open()
 	if err != nil {
 		return 0, err
 	}
 
-	res, err := db.Exec(`UPDATE todos SET title=$1, description=$2, done=$3 WHERE id=$4 AND user_id=$5`, todo.Title, todo.Description, todo.Done, id, userID)
+	res, err := db.Exec(`UPDATE todos SET done=$1 WHERE id=$2 AND user_id=$3`, done, id, userID)
 	if err != nil {
 		return 0, err
 	}
