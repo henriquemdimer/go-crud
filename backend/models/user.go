@@ -21,13 +21,25 @@ func InsertUser(name string, password string) (id int64, err error) {
 	return
 }
 
-func GetUser(name string) (user User, err error) {
+func GetUserByName(name string) (user User, err error) {
 	db, err := db.Open()
 	if err != nil {
 		return
 	}
 
 	err = db.QueryRow("SELECT * FROM users WHERE name=$1", name).Scan(&user.Id, &user.Name, &user.Password)
+
+	db.Close()
+	return
+}
+
+func GetUserById(id int64) (user User, err error) {
+	db, err := db.Open()
+	if err != nil {
+		return
+	}
+
+	err = db.QueryRow("SELECT * FROM users WHERE id=$1", id).Scan(&user.Id, &user.Name, &user.Password)
 
 	db.Close()
 	return
