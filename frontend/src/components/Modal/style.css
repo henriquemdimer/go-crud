@@ -8,7 +8,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, calc(-50% + 80px)) scale(0.6);
-    z-index: 3;
+    z-index: 21;
     transition: all ease .5s;
     opacity: 0;
     pointer-events: none;
@@ -19,4 +19,10 @@
     pointer-events: all;
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+}
+
+@media (max-width: 320px) {
+    .modal {
+        max-width: 95vw;
+    }
 }
