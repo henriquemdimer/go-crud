@@ -5,6 +5,7 @@ import { createTodo } from "../../shared/api/todo";
 export interface IProps {
     reloadData: (...args: any[]) => Promise<void>;
     fireToast: (content: string) => void;
+    setModal: (value: boolean) => any;
 }
 
 export function Input(props: IProps) {
@@ -12,14 +13,17 @@ export function Input(props: IProps) {
     const [loading, setLoading] = useState(false);
 
     async function addTodo(e: FormEvent) {
-        setLoading(true);
-
         e.preventDefault();
         try {
             const token = localStorage.getItem("token");
-            if (!token) return;
+            if (!token) {
+                props.setModal(true);
+                return props.fireToast("Você precisa estar logado em uma conta!")
+            }
+
             if (text.length < 1) return;
 
+            setLoading(true);
             await createTodo(text, token);
             await props.reloadData(false);
 
