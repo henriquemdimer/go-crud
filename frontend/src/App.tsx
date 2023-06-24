@@ -6,6 +6,10 @@ import { Auth } from './components/Auth';
 import { getUser } from './shared/api/user';
 import { getAllTodos } from './shared/api/todo';
 import { Toast } from './components/Toast'
+import { Modal } from './components/Modal';
+import { Button } from './components/Button';
+import { Dropdown, DropdownContent, DropdownTrigger } from './components/Dropdown';
+import { ping } from './shared/api/main';
 
 interface Todo {
   id: number;
@@ -22,10 +26,12 @@ interface IToast {
 function App() {
   const [active, setActive] = useState(false);
   const [name, setName] = useState("");
-  const [loadingTodos, setLoadingTodos] = useState(true);
-  const [loadingUser, setLoadingUser] = useState(true);
+  const [loadingTodos, setLoadingTodos] = useState(false);
+  const [loadingUser, setLoadingUser] = useState(false);
   const [todos, setTodos] = useState([]);
   const [toasts, setToasts] = useState<IToast[]>([]);
+  const [alert, setAlert] = useState(false);
+  const [dropdown, setDropdown] = useState(false);
 
   async function fetchUser() {
     const token = localStorage.getItem("token");
@@ -53,7 +59,7 @@ function App() {
     } catch (err) {
       setLoadingTodos(false);
       setLoadingUser(false);
-      console.log(err);
+      throw err;
     }
   }
 
@@ -72,10 +78,17 @@ function App() {
     setToasts(_toasts);
   }
 
+  function Logout() {
+    localStorage.removeItem("token")
+    setName("");
+    setTodos([]);
+    setDropdown(false);
+    fireToast("Você saiu da conta com sucesso!")
+  }
+
   useEffect(() => {
     const initialFetch = async () => {
       await reloadData();
-
       setTimeout(() => {
         const items = document.getElementById("items");
 
@@ -84,6 +97,21 @@ function App() {
           behavior: "smooth"
         });
       }, 800)
+
+      try {
+        await ping()
+      } catch (_) {
+        setAlert(true);
+        const interval = setInterval(async () => {
+          if (!alert) clearInterval(interval);
+
+          try {
+            await ping();
+            setAlert(false);
+            fireToast("Conexão reestabelecida!")
+          } catch { }
+        }, 5000);
+      }
     }
 
     initialFetch();
@@ -91,15 +119,31 @@ function App() {
 
   return (
     <>
+      <Modal blockClose={true} active={alert} setActive={setAlert}>
+        <div id="outage">
+          <img src="outage.png" width={100} height={100} />
+          <p>Parece que o servidor está offline, tente novamente dentro de alguns minutos!</p>
+          <Button loading={loadingUser} disabled={loadingUser} onClick={() => ping().then(() => { setAlert(false); fireToast("Conexão reestabelecida!") }).catch(() => fireToast("Não foi possivel se comunicar com o servidor!"))} label='Tentar novamente' />
+        </div>
+      </Modal>
       <Auth fireToast={fireToast} reloadData={reloadData} active={active} setActive={setActive} />
       <div id="container">
         <div id="header">
           <h2>TodoList</h2>
-          <div id="avatar" className={`${loadingUser || name.length > 1 ? "name" : ""}`} onClick={() => setActive(true)}>
-            {loadingUser ? <img src="loader.svg" width={25} height={25} /> : name.length < 1 ? <img src="account-placeholder.png" width={45} height={45} /> : name[0].toUpperCase()}
-          </div>
+          <Dropdown active={dropdown} setActive={setDropdown}>
+            <DropdownTrigger onClick={() => name && setDropdown(true)}>
+              <div id="avatar" className={`${loadingUser || name.length > 1 ? "name" : ""}`} onClick={() => name.length ? {} : setActive(true)}>
+                {loadingUser ? <img src="loader.svg" width={25} height={25} /> : name.length < 1 ? <img src="account-placeholder.png" width={45} height={45} /> : name[0].toUpperCase()}
+              </div>
+            </DropdownTrigger>
+            <DropdownContent>
+              <p className='user'>{name}</p>
+              <hr></hr>
+              <p id="logout" onClick={() => Logout()}>Logout</p>
+            </DropdownContent>
+          </Dropdown>
         </div>
-        <Input fireToast={fireToast} reloadData={reloadData} />
+        <Input setModal={setActive} fireToast={fireToast} reloadData={reloadData} />
         <ul id="items">
           {todos.map((todo: Todo) => (
             <Todo fireToast={fireToast} reloadData={reloadData} done={todo.done} id={todo.id} title={todo.title} key={todo.id} />

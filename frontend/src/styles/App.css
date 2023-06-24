@@ -31,6 +31,7 @@
     color: white;
     font-weight: bold;
     font-size: 25px;
+    user-select: none;
 }
 
 #container #items {
@@ -55,4 +56,34 @@
     display: flex;
     flex-direction: column;
     z-index: 999;
+}
+
+#outage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+}
+
+#outage button {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+}
+
+#outage p {
+    margin-top: 10px;
+}
+
+.user {
+    overflow: hidden;
+    white-space: keep-all;
+    text-overflow: ellipsis;
+    max-width: 99%;
+}
+
+#logout {
+    cursor: pointer;
 }
