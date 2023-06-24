@@ -21,11 +21,12 @@ func main() {
 
 	router := chi.NewRouter()
 
+	router.Route("/", handlers.LoadMainRoutes)
 	router.Route("/todos", handlers.LoadTodoRoutes)
 	router.Route("/users", handlers.LoadUserRoutes)
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedOrigins:   []string{os.Getenv("ORIGIN")},
 		AllowCredentials: true,
 		Debug:            true,
 		AllowedHeaders:   []string{"Authorization", "Content-Type"},
