@@ -33,6 +33,7 @@ export function Auth(props: IProps) {
             props.setActive(false);
             props.fireToast("Conta criada com sucesso!")
             await props.reloadData();
+            setMethod("login")
         } catch (err: any) {
             if (err.response) {
                 if (err.response.status == 409) {
@@ -68,7 +69,7 @@ export function Auth(props: IProps) {
                     props.fireToast("Email e/ou senha invalido(s)");
                 }
             } else {
-                props.fireToast("Houve um erro desconhecido ao criar a conta, tente novamnete mais tarde!");
+                props.fireToast("Houve um erro desconhecido ao entrar na conta, tente novamnete mais tarde!");
             }
         } finally {
             setLoading(false);
