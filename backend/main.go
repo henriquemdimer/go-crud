@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/henriquemdimer/go-crud/db"
 	"github.com/henriquemdimer/go-crud/handlers"
+	"github.com/henriquemdimer/go-crud/middlewares"
 	"github.com/rs/cors"
 )
 
@@ -21,6 +22,7 @@ func main() {
 
 	PORT := os.Getenv("SERVER_PORT")
 	router := chi.NewRouter()
+	router.Use(middlewares.RateLimit)
 
 	router.Route("/", handlers.LoadMainRoutes)
 	router.Route("/todos", handlers.LoadTodoRoutes)
