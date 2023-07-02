@@ -37,4 +37,4 @@ services:
     healthCheckPath: /
 
 databases:
-  name: db
+  - name: db
