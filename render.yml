@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: backend
+    runtime: docker
+    rootDir: ./backend
+    healthCheckPath: /
+    envVars:
+      - key: DBHOST
+        fromDatabase:
+          name: DBHOST
+          property: host
+      - key: DBUSER
+        fromDatabase:
+          name: DBUSER
+          property: user
+      - key: DBPASSWORD
+        fromDatabase:
+          name: DBPASSWORD
+          property: password
+      - key: DBPORT
+        fromDatabase:
+          name: DBPORT
+          property: port
+      - key: DBNAME
+        fromDatabase:
+          name: DBNAME
+          property: database
+      - key: JWT_SECRET
+        value: supersecretkey
+      - key: origin
+        value: frontend
+
+  - type: web
+    name: frontend
+    runtime: docker
+    rootDir: ./frontend
+    healthCheckPath: /
+
+databases:
+  name: db
