@@ -1,5 +1,5 @@
 import Axios from 'axios';
 
 export default Axios.create({
-    baseURL: "/api"
+    baseURL: process.env.REACT_APP_SECRET_BACKEND_URL
 });
