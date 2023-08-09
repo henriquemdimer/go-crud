@@ -46,3 +46,11 @@
 #container #items::-webkit-scrollbar {
     display: none;
 }
+
+#toasts {
+    position: fixed;
+    bottom: 0;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+}
