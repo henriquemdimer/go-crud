@@ -9,6 +9,7 @@ export interface IProps {
     active: boolean;
     setActive: (state: boolean) => void;
     reloadData: (...args: any[]) => Promise<void>;
+    fireToast: (content: string) => void;
 }
 
 export function Auth(props: IProps) {
@@ -51,6 +52,7 @@ export function Auth(props: IProps) {
             const { data } = await Login(username.value, password.value);
             localStorage.setItem("token", data.token);
             props.setActive(false);
+            props.fireToast("Você entrou na conta com sucesso! :)");
             await props.reloadData();
         } catch (err) {
             console.error(err);

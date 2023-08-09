@@ -4,6 +4,7 @@ import { createTodo } from "../../shared/api/todo";
 
 export interface IProps {
     reloadData: (...args: any[]) => Promise<void>;
+    fireToast: (content: string) => void;
 }
 
 export function Input(props: IProps) {
@@ -12,10 +13,12 @@ export function Input(props: IProps) {
 
     async function addTodo(e: FormEvent) {
         setLoading(true);
+
         e.preventDefault();
         try {
             const token = localStorage.getItem("token");
             if (!token) return;
+            if (text.length < 1) return;
 
             await createTodo(text, token);
             await props.reloadData(false);
@@ -35,6 +38,8 @@ export function Input(props: IProps) {
                             behavior: "smooth"
                         });
                     }
+
+                    props.fireToast("Conectado");
                 }, 300);
 
                 setTimeout(() => {
