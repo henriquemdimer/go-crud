@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/henriquemdimer/go-crud/db"
 	"github.com/henriquemdimer/go-crud/handlers"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -23,5 +24,7 @@ func main() {
 	router.Route("/todos", handlers.LoadTodoRoutes)
 	router.Route("/users", handlers.LoadUserRoutes)
 
-	http.ListenAndServe(":8080", router)
+	handler := cors.Default().Handler(router)
+
+	http.ListenAndServe(":8080", handler)
 }
