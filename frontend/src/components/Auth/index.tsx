@@ -17,7 +17,6 @@ export function Auth(props: IProps) {
     const [loading, setLoading] = useState(false);
 
     async function createAccount(e: FormEvent) {
-        setLoading(true);
         e.preventDefault();
         const username = document.getElementById("register__username") as HTMLInputElement;
         const password = document.getElementById("register__password") as HTMLInputElement;
@@ -25,22 +24,30 @@ export function Auth(props: IProps) {
 
         if ((!username || !password || !rpassword)) return console.log("missing input");
         if (!username.value || !password.value || !rpassword.value) return console.log("missing values");
-        if (password.value !== rpassword.value) return console.log("password not match");
+        if (password.value !== rpassword.value) return props.fireToast("As senhas precisam ser iguais!");
 
         try {
+            setLoading(true);
             const { data } = await createUser(username.value, password.value);
             localStorage.setItem("token", data.token);
             props.setActive(false);
+            props.fireToast("Conta criada com sucesso!")
             await props.reloadData();
-        } catch (err) {
-            console.log(err);
+        } catch (err: any) {
+            if (err.response) {
+                if (err.response.status == 409) {
+                    props.fireToast("Uma conta com esse nome já existe, tente usar outro!")
+                }
+            } else {
+                console.log(err);
+                props.fireToast("Houve um erro desconhecido ao criar a conta, tente novamnete mais tarde!");
+            }
         } finally {
             setLoading(false);
         }
     }
 
     async function getAccount(e: FormEvent) {
-        setLoading(true);
         e.preventDefault();
         const username = document.getElementById("login__username") as HTMLInputElement;
         const password = document.getElementById("login__password") as HTMLInputElement;
@@ -49,13 +56,20 @@ export function Auth(props: IProps) {
         if (!username.value || !username.value) return console.log("missing values");
 
         try {
+            setLoading(true);
             const { data } = await Login(username.value, password.value);
             localStorage.setItem("token", data.token);
             props.setActive(false);
             props.fireToast("Você entrou na conta com sucesso! :)");
             await props.reloadData();
-        } catch (err) {
-            console.error(err);
+        } catch (err: any) {
+            if (err.response) {
+                if (err.response.status == 401) {
+                    props.fireToast("Email e/ou senha invalido(s)");
+                }
+            } else {
+                props.fireToast("Houve um erro desconhecido ao criar a conta, tente novamnete mais tarde!");
+            }
         } finally {
             setLoading(false);
         }
@@ -76,7 +90,7 @@ export function Auth(props: IProps) {
                                 <label>Senha</label>
                                 <input required type="password" id="login__password" />
                             </div>
-                            <Button loading={loading} type="submit" label='Logar' />
+                            <Button disabled={loading} loading={loading} type="submit" label='Logar' />
                             <div className="auth__change">
                                 <p>Não possui uma conta? <span onClick={() => setMethod("register")}>Crie uma</span></p>
                             </div>
@@ -98,7 +112,7 @@ export function Auth(props: IProps) {
                                 <label>Repetir senha</label>
                                 <input required type="password" id="register__rpassword" />
                             </div>
-                            <Button loading={loading} type="submit" label='Criar conta' />
+                            <Button disabled={loading} loading={loading} type="submit" label='Criar conta' />
                             <div className="auth__change">
                                 <p>Já possui uma conta? <span onClick={() => setMethod("login")}>Entre nela</span></p>
                             </div>
