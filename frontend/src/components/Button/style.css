@@ -7,4 +7,7 @@
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

@@ -5,9 +5,14 @@
     border-radius: 8px;
     opacity: 0;
     transition: all ease .5s;
+    max-width: 250px;
+    box-shadow: 0px 0px 37px 11px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
 }
 
 .toast.active {
+    z-index: 999;
+    pointer-events: all;
     transform: translateX(0) scale(1);
     opacity: 1;
     margin-bottom: 10px;

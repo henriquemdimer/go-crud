@@ -73,7 +73,7 @@
     content: "";
     width: 10px;
     height: 2px;
-    background-color: white;
+    background-color: rgb(238, 238, 238);
     position: absolute;
     top: 48.5%;
     left: 60%;
@@ -83,7 +83,7 @@
 .todo .checkbox span::before {
     content: "";
     width: 6px;
-    background-color: white;
+    background-color: rgb(238, 238, 238);
     position: absolute;
     top: 55%;
     left: 38%;
