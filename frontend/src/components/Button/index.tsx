@@ -1,10 +1,9 @@
 import "./style.css";
 import React from 'react';
 
-export interface IProps {
+export interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     label: string;
     onClick?: (...args: any[]) => any;
-    type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type'];
     loading?: boolean;
 }
 
