@@ -38,8 +38,6 @@ export function Input(props: IProps) {
                             behavior: "smooth"
                         });
                     }
-
-                    props.fireToast("Conectado");
                 }, 300);
 
                 setTimeout(() => {
@@ -49,6 +47,7 @@ export function Input(props: IProps) {
                 }, 2000);
             }
         } catch (err) {
+            props.fireToast("Houve um erro ao criar todo, tente novamente mais tarde");
             console.log(err);
             setLoading(false);
         }

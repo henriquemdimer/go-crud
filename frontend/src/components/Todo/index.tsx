@@ -7,6 +7,7 @@ export interface IProps {
     id: number;
     done: boolean;
     reloadData: (...args: any[]) => Promise<void>;
+    fireToast: (content: string) => void;
 }
 
 export function Todo(props: IProps) {
@@ -31,6 +32,7 @@ export function Todo(props: IProps) {
                 await props.reloadData(false);
             }, 500);
         } catch (err) {
+            props.fireToast("Houve um erro ao remover o todo, tente novamente mais tarde!");
             console.log(err);
         }
     }
