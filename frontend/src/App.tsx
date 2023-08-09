@@ -91,11 +91,6 @@ function App() {
 
   return (
     <>
-      <div id="toasts">
-        {toasts.map((toast) => (
-          <Toast key={toast.id} removeToast={removeToast} id={toast.id} content={toast.content} />
-        ))}
-      </div>
       <Auth fireToast={fireToast} reloadData={reloadData} active={active} setActive={setActive} />
       <div id="container">
         <div id="header">
@@ -107,9 +102,14 @@ function App() {
         <Input fireToast={fireToast} reloadData={reloadData} />
         <ul id="items">
           {todos.map((todo: Todo) => (
-            <Todo reloadData={reloadData} done={todo.done} id={todo.id} title={todo.title} key={todo.id} />
+            <Todo fireToast={fireToast} reloadData={reloadData} done={todo.done} id={todo.id} title={todo.title} key={todo.id} />
           ))}
         </ul>
+      </div>
+      <div id="toasts">
+        {toasts.map((toast) => (
+          <Toast key={toast.id} removeToast={removeToast} id={toast.id} content={toast.content} />
+        ))}
       </div>
     </>
   );
