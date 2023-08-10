@@ -19,6 +19,7 @@ func main() {
 	}
 	db.Close()
 
+	PORT := os.Getenv("SERVER_PORT")
 	router := chi.NewRouter()
 
 	router.Route("/", handlers.LoadMainRoutes)
@@ -33,6 +34,7 @@ func main() {
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
 	})
 	handler := c.Handler(router)
+	fmt.Println("Server started on port: " + PORT)
 
-	http.ListenAndServe(":8080", handler)
+	http.ListenAndServe(":"+PORT, handler)
 }
