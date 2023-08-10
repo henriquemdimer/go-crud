@@ -87,3 +87,12 @@
 #logout {
     cursor: pointer;
 }
+
+#todo__placeholder {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
