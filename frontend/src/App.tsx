@@ -88,7 +88,9 @@ function App() {
 
   useEffect(() => {
     const initialFetch = async () => {
-      await reloadData();
+      try {
+        await reloadData();
+      } catch { }
       setTimeout(() => {
         const items = document.getElementById("items");
 
@@ -101,6 +103,7 @@ function App() {
       try {
         await ping()
       } catch (_) {
+        console.log(_);
         setAlert(true);
         const interval = setInterval(async () => {
           if (!alert) clearInterval(interval);
@@ -137,7 +140,7 @@ function App() {
               </div>
             </DropdownTrigger>
             <DropdownContent>
-              <p className='user'>{name}</p>
+              <pre className='user'>{name}</pre>
               <hr></hr>
               <p id="logout" onClick={() => Logout()}>Logout</p>
             </DropdownContent>
@@ -145,9 +148,14 @@ function App() {
         </div>
         <Input setModal={setActive} fireToast={fireToast} reloadData={reloadData} />
         <ul id="items">
-          {todos.map((todo: Todo) => (
+          {todos.length > 0 ? todos.map((todo: Todo) => (
             <Todo fireToast={fireToast} reloadData={reloadData} done={todo.done} id={todo.id} title={todo.title} key={todo.id} />
-          ))}
+          )) : (
+            <div id="todo__placeholder">
+              <img src="no-content.png" width={100} height={100} />
+              <p>Nenhum Todo criado ainda, que tal criar um?</p>
+            </div>
+          )}
         </ul>
       </div>
       <div id="toasts">
