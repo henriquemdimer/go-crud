@@ -1,0 +1,2 @@
+CREATE TABLE IF NOT EXISTS todos (id serial primary key, title varchar, description text, done bool, user_id int);
+CREATE TABLE IF NOT EXISTS users (id serial primary key, name varchar, password varchar);
