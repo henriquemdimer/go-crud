@@ -20,6 +20,11 @@ func CreateTodo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if len(todo.Title) > 100 {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
 	id, err := models.InsertOneTodo(todo, userID)
 	var resp map[string]any
 

@@ -23,6 +23,16 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if len(user.Name) > 100 {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if len(user.Password) > 100 {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
 	checkUser, _ := models.GetUserByName(user.Name)
 	if checkUser.Name == user.Name {
 		http.Error(w, http.StatusText(http.StatusConflict), http.StatusConflict)
